@@ -1,32 +1,56 @@
 """Простой консольный калькулятор с обработкой ошибок ввода и деления на ноль."""
 
-print("Калькулятор на Python.")
+
+def get_num(prompt):
+    """Функция безопасного ввода числа с возможностью выхода."""
+    while True:
+        user_input = input(prompt).strip()
+
+        if user_input.lower() == "q":
+            print("Выход из калькулятора.")
+            return "q"
+
+        try:
+            return float(user_input)
+        except ValueError:
+            print("Вы ввели не число, попробуйте еще раз!")
+
+
+print("Самый лучший калькулятор.")
+print("Если хотите выйти, введите 'q' в любом поле.")
 
 while True:
-    try:
-        first_input = input("Введите первое число (или 'q' для выхода): ")
+    first_num = get_num("Введите первое число: ")
+    if first_num == "q":
+        break
 
-        if first_input.lower() == "q":
-            print("Выход из калькулятора.")
-            break
+    second_num = get_num("Введите второе число: ")
+    if second_num == "q":
+        break
 
-        first_num = float(first_input)
-        second_num = float(input("Введите второе число: "))
+    char = input("Введите операцию: ").strip()
+    if char.lower() == "q":
+        print("Выход из калькулятора.")
+        break
 
-        char = input("Введите операцию: ")
-
-        if char == "+":
+    match char:
+        case "+":
             print(f"Результат: {first_num + second_num}")
-        elif char == "-":
+        case "-":
             print(f"Результат: {first_num - second_num}")
-        elif char == "*":
+        case "*":
             print(f"Результат: {first_num * second_num}")
-        elif char == "/":
-            print(f"Результат: {first_num / second_num}")
-        else:
-            print("Не понял ваш оператор")
+        case "/":
+            try:
+                print(f"Результат: {first_num / second_num}")
+            except ZeroDivisionError:
+                print("Деление на ноль недопустимо!")
+        case "**":
+            try:
+                print(f"Результат: {first_num ** second_num}")
+            except ZeroDivisionError:
+                print("Деление на ноль недопустимо!")
+        case _:
+            print("Неизвестный оператор!")
 
-    except ValueError:
-        print("Вы ввели не число!")
-    except ZeroDivisionError:
-        print("Деление на ноль недопустимо!")
+    print("-" * 30)
