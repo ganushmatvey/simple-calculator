@@ -1,22 +1,28 @@
-"""Простой консольный калькулятор с обработкой ошибок ввода и деления на ноль."""
+import operator
+
+OPERATIONS = {
+    "+": operator.add,
+    "-": operator.sub,
+    "*": operator.mul,
+    "/": operator.truediv,
+    "**": operator.pow,
+}
 
 
 def get_num(prompt):
     """Функция безопасного ввода числа с возможностью выхода."""
     while True:
         user_input = input(prompt).strip()
-
         if user_input.lower() == "q":
             print("Выход из калькулятора.")
             return "q"
-
         try:
             return float(user_input)
         except ValueError:
             print("Вы ввели не число, попробуйте еще раз!")
 
 
-print("Самый лучший калькулятор.")
+print("Калькулятор на Python.")
 print("Если хотите выйти, введите 'q' в любом поле.")
 
 while True:
@@ -28,29 +34,23 @@ while True:
     if second_num == "q":
         break
 
-    char = input("Введите операцию: ").strip()
+    char = input(f"Введите операцию ({', '.join(OPERATIONS.keys())}): ").strip()
+
     if char.lower() == "q":
         print("Выход из калькулятора.")
         break
 
-    match char:
-        case "+":
-            print(f"Результат: {first_num + second_num}")
-        case "-":
-            print(f"Результат: {first_num - second_num}")
-        case "*":
-            print(f"Результат: {first_num * second_num}")
-        case "/":
-            try:
-                print(f"Результат: {first_num / second_num}")
-            except ZeroDivisionError:
-                print("Деление на ноль недопустимо!")
-        case "**":
-            try:
-                print(f"Результат: {first_num ** second_num}")
-            except ZeroDivisionError:
-                print("Деление на ноль недопустимо!")
-        case _:
-            print("Неизвестный оператор!")
+    if char in OPERATIONS:
+
+        calc_function = OPERATIONS[char]
+
+        try:
+            result = calc_function(first_num, second_num)
+            print(f"Результат: {result}")
+        except ZeroDivisionError:
+            print("Ошибка! Деление на ноль недопустимо")
+
+    else:
+        print("Неизвестный оператор")
 
     print("-" * 30)
